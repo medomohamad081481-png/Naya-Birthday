@@ -1,571 +1,1164 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>كل عام وأنتِ عيدي... Naya 🌸</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg-dark: #12040b;
-      --bg-card: rgba(36, 8, 23, 0.78);
-      --accent-pink: #ff6584;
-      --accent-rose: #d4145a;
-      --gold: #f6d365;
-      --text-main: #fff0f5;
-      --text-muted: #dca3b5;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>كل عام وأنتِ عيدي يا Naya 🌸 11/11/2006</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Arabic & Romantic Calligraphy -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700&family=Great+Vibes&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+    <style>
+        :root {
+            --bg-deep-rose: #240615;
+            --bg-velvet-pink: #3d0b25;
+            --bg-blush-mid: #591136;
+            --rose-bright: #ff4d88;
+            --rose-soft: #ff99bb;
+            --rose-pastel: #ffd1e3;
+            --rose-gold: #f7c59f;
+            --glass-pink: rgba(88, 16, 53, 0.55);
+            --glass-border: rgba(255, 182, 213, 0.38);
+        }
 
-    body {
-      background: radial-gradient(circle at top, #2b081a 0%, #12040b 100%);
-      color: var(--text-main);
-      font-family: 'Cairo', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow-x: hidden;
-      position: relative;
-    }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    /* تساقط بتلات الورد في الخلفية */
-    .petals-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden;
-    }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: radial-gradient(circle at 50% 15%, #66143f 0%, #3b0923 45%, #1f0412 100%);
+            background-attachment: fixed;
+            color: #fff0f6;
+            overflow-x: hidden;
+            user-select: none;
+            min-height: 100vh;
+        }
 
-    .petal {
-      position: absolute;
-      background: radial-gradient(circle, #ff758c 20%, #d4145a 100%);
-      border-radius: 150% 0 150% 0;
-      opacity: 0.6;
-      animation: fall linear infinite;
-    }
+        .font-serif-ar {
+            font-family: 'Amiri', serif;
+        }
 
-    @keyframes fall {
-      0% {
-        transform: translateY(-50px) rotate(0deg) scale(0.8);
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(105vh) rotate(360deg) scale(1.2);
-        opacity: 0;
-      }
-    }
+        .font-ruqaa {
+            font-family: 'Aref Ruqaa', cursive;
+        }
 
-    /* شاشة القفل الفخمة والنقية */
-    #lock-screen {
-      position: relative;
-      z-index: 10;
-      width: 90%;
-      max-width: 380px;
-      background: var(--bg-card);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 101, 132, 0.25);
-      border-radius: 28px;
-      padding: 35px 22px;
-      text-align: center;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.7), inset 0 0 20px rgba(255, 101, 132, 0.08);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
+        .font-romance {
+            font-family: 'Great Vibes', cursive;
+        }
 
-    .header-icon {
-      width: 75px;
-      height: 75px;
-      background: radial-gradient(circle, rgba(212,20,90,0.35) 0%, rgba(32,7,20,0) 70%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 10px;
-      font-size: 38px;
-      animation: pulse 2s infinite ease-in-out;
-    }
+        .font-cinzel {
+            font-family: 'Cinzel Decorative', cursive;
+        }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
+        /* Background Canvas for Petals & Glowing Hearts */
+        #petals-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    .sub-title {
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: var(--accent-pink);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
+        /* Ambient Pink Bokeh Glows */
+        .bokeh-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(75px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+        }
 
-    .main-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 30px;
-      text-shadow: 0 2px 10px rgba(255,101,132,0.4);
-    }
+        /* Ultra-Romantic Pink Glassmorphism */
+        .pink-glass {
+            background: linear-gradient(145deg, rgba(110, 22, 68, 0.62) 0%, rgba(58, 10, 35, 0.75) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 175, 209, 0.35);
+            box-shadow: 
+                0 15px 35px -5px rgba(25, 2, 14, 0.65),
+                0 0 28px rgba(255, 92, 151, 0.2),
+                inset 0 1px 1px rgba(255, 230, 242, 0.3);
+        }
 
-    /* مربعات الرمز السري */
-    .pin-display {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      direction: ltr;
-      margin-bottom: 25px;
-    }
+        .pink-glass-light {
+            background: linear-gradient(135deg, rgba(255, 138, 184, 0.22) 0%, rgba(255, 77, 136, 0.12) 100%);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 194, 222, 0.45);
+            box-shadow: 0 8px 25px rgba(255, 77, 136, 0.18);
+        }
 
-    .pin-box {
-      width: 35px;
-      height: 45px;
-      background: rgba(18, 4, 11, 0.65);
-      border: 1.5px solid rgba(255, 101, 132, 0.25);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
-      color: var(--gold);
-      transition: all 0.2s ease;
-    }
+        .pink-card-ribbon {
+            background: linear-gradient(90deg, transparent, rgba(255, 182, 213, 0.25), transparent);
+        }
 
-    .pin-box.filled {
-      border-color: var(--accent-pink);
-      box-shadow: 0 0 10px rgba(255, 101, 132, 0.4);
-    }
+        /* Text Glows & Gradients */
+        .rose-gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #ffc2dd 40%, #ff7eb3 75%, #ffd6a5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    /* لوحة الأرقام الصامتة */
-    .keypad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 22px;
-    }
+        .naya-glow {
+            color: #fff5f9;
+            text-shadow: 
+                0 0 15px rgba(255, 77, 136, 0.9),
+                0 0 35px rgba(255, 115, 168, 0.75),
+                0 0 65px rgba(255, 182, 213, 0.55),
+                0 4px 12px rgba(45, 4, 24, 0.8);
+        }
 
-    .key {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #fff;
-      font-size: 20px;
-      font-weight: 700;
-      padding: 14px 0;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .key:active {
-      background: rgba(255, 101, 132, 0.25);
-      border-color: var(--accent-pink);
-      transform: scale(0.96);
-    }
-
-    .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #ff6584, #d4145a);
-      color: #fff;
-      border: none;
-      padding: 15px;
-      font-size: 16px;
-      font-weight: 800;
-      border-radius: 16px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(212, 20, 90, 0.4);
-      transition: 0.3s;
-    }
-
-    .btn-submit:active {
-      transform: scale(0.98);
-    }
-
-    /* شاشة المحتوى بعد إدخال الرمز */
-    #content-screen {
-      display: none;
-      position: relative;
-      z-index: 10;
-      width: 92%;
-      max-width: 440px;
-      margin: 30px auto;
-      animation: fadeIn 1s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* بطاقة المحتوى الأساسية */
-    .content-card {
-      background: var(--bg-card);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 101, 132, 0.2);
-      border-radius: 28px;
-      padding: 30px 22px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-      text-align: center;
-      position: relative;
-    }
-
-    .music-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 101, 132, 0.15);
-      border: 1px solid rgba(255, 101, 132, 0.3);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      color: #fff;
-      margin-bottom: 25px;
-      cursor: pointer;
-    }
-
-    .prose-text {
-      font-family: 'Amiri', serif;
-      font-size: 18px;
-      line-height: 2.1;
-      color: #fff0f5;
-      text-align: justify;
-      text-align-last: center;
-      margin-bottom: 25px;
-    }
-
-    .quote-box {
-      font-family: 'Amiri', serif;
-      font-size: 19px;
-      font-weight: bold;
-      color: #fff;
-      margin: 25px 0 20px;
-      padding: 0 10px;
-    }
-
-    .divider {
-      height: 1px;
-      background: rgba(255, 101, 132, 0.2);
-      margin: 25px auto;
-      width: 85%;
-    }
-
-    /* زر الواتساب الرومانسي المخصص */
-    .whatsapp-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: linear-gradient(135deg, #25D366, #128C7E);
-      color: #ffffff;
-      text-decoration: none;
-      padding: 15px 20px;
-      border-radius: 18px;
-      font-size: 15px;
-      font-weight: 700;
-      margin: 20px 0 15px;
-      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .whatsapp-btn:active {
-      transform: scale(0.97);
-    }
-
-    /* زر نثر الزهور */
-    .flower-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #ff6584, #d4145a);
-      color: #fff;
-      border: none;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: 800;
-      border-radius: 18px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(212, 20, 90, 0.4);
-      margin-bottom: 25px;
-    }
-
-    /* التذييل */
-    .footer {
-      font-size: 13px;
-      color: #dca3b5;
-      margin-top: 15px;
-    }
-
-    .footer .signature {
-      font-family: 'Great Vibes', cursive;
-      font-size: 20px;
-      color: #fff;
-      margin: 0 4px;
-    }
-
-    /* تأثير إيموجي اللمس عند لمس الشاشة */
-    .touch-emoji {
-      position: fixed;
-      pointer-events: none;
-      font-size: 24px;
-      animation: floatUp 0.9s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-      z-index: 9999;
-    }
-
-    @keyframes floatUp {
-      0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -100px) scale(1.4) rotate(20deg);
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- بتلات الورد المتساقطة -->
-  <div class="petals-container" id="petals"></div>
-
-  <!-- مشغل الموسيقى الخلفي المدمج من يوتيوب -->
-  <div style="position: fixed; bottom: 0; left: 0; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; z-index: -1; overflow: hidden;">
-    <div id="yt-player"></div>
-  </div>
-
-  <!-- شاشة القفل النظيفة بدون تلميحات وبدون أصوات -->
-  <div id="lock-screen">
-    <div class="header-icon">💖</div>
-    <div class="sub-title">Royal Rose Sanctuary</div>
-    <div class="main-title">بوابة قلب Naya</div>
-
-    <div class="pin-display">
-      <div class="pin-box" id="b0"></div>
-      <div class="pin-box" id="b1"></div>
-      <div class="pin-box" id="b2"></div>
-      <div class="pin-box" id="b3"></div>
-      <div class="pin-box" id="b4"></div>
-      <div class="pin-box" id="b5"></div>
-      <div class="pin-box" id="b6"></div>
-      <div class="pin-box" id="b7"></div>
-    </div>
-
-    <!-- لوحة الأرقام الصامتة تماماً -->
-    <div class="keypad">
-      <button class="key" onclick="pressKey('1')">1</button>
-      <button class="key" onclick="pressKey('2')">2</button>
-      <button class="key" onclick="pressKey('3')">3</button>
-      <button class="key" onclick="pressKey('4')">4</button>
-      <button class="key" onclick="pressKey('5')">5</button>
-      <button class="key" onclick="pressKey('6')">6</button>
-      <button class="key" onclick="pressKey('7')">7</button>
-      <button class="key" onclick="pressKey('8')">8</button>
-      <button class="key" onclick="pressKey('9')">9</button>
-      <button class="key" onclick="clearPin()">مسح</button>
-      <button class="key" onclick="pressKey('0')">0</button>
-      <button class="key" onclick="deleteLast()">⌫</button>
-    </div>
-
-    <button class="btn-submit" onclick="verifyPin()">افتحي عالمكِ الوردي يا Naya 🌷</button>
-  </div>
-
-  <!-- شاشة المحتوى بعد فتح القفل -->
-  <div id="content-screen">
-    <div class="content-card">
-      
-      <div class="music-badge" onclick="toggleMusic()" title="تشغيل / إيقاف الموسيقى">
-        <span>🌸</span>
-        <span>سيمفونية Naya</span>
-        <span id="music-indicator">ılıll|</span>
-      </div>
-
-      <div class="prose-text">
-        لم يكن يوم ميلادكِ مجرد يوم وُلدت فيه فتاةٌ جميلة، بل كان الميعاد الذي أودع الله فيه سرّ سعادتي وسكينتي في هذا العالم.
-        <br><br>
-        تِسعُ سنواتٍ مضت منذ عام 2017؛ تسعُ سنواتٍ لم تكن مجرد أرقامٍ تُطوى في كتاب الأيام، بل كانت رحلةً فلسفية عميقة عرفتُ فيها أن الحب الحقيقي لا يبهت بمرور الزمن، بل يتجذّر في الروح كما تتجذّر الوردة في أرضها. كبرنا معاً، وتبدّلت فصول الحياة حولنا، وبقيتِ أنتِ وحدكِ الربيع الثابت الذي لا يغادر قلبي.
-        <br><br>
-        أنتِ لستِ فقط حبيبتي التي أميّزها عن كل العالم، بل أنتِ مرآة روحي، والقصيدة التي عجزت كل اللغات عن الإحاطة بجمالها. في عامكِ العشرين، أعدكِ أن أبقى لكِ السند والأمان، والحبيب الذي يرى في عينيكِ وطنه الأول والأخير.
-      </div>
-
-      <div class="quote-box">
-        "كل عامٍ وأنتِ عيدي، وكل عامٍ وأنتِ النور الذي تشرق به حياتي يا Naya 🌸"
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- زر الواتساب المخصص والمباشر -->
-      <a href="https://wa.me/963996183867?text=%D9%87%D8%A7%D9%8A%20%D9%8A%D8%A7%20%D8%B1%D9%88%D8%AD%D9%8A%20%D9%82%D8%B1%D8%A3%D8%AA%20%D9%83%D9%84%20%D9%83%D9%84%D9%85%D8%A9%20%D9%88%D9%87%D8%A7%D9%8A%20%D8%B5%D9%88%D8%B1%D8%AA%D9%8A%20%D9%88%D8%A3%D9%86%D8%A7%20%D9%85%D8%A8%D8%AA%D8%B3%D9%85%D8%A9%20%D9%85%D8%AB%D9%84%20%D9%85%D8%A7%20%D8%B7%D9%84%D8%A8%D8%AA%20%F0%9F%8C%B8%E2%9C%A8" target="_blank" class="whatsapp-btn">
-        <span>أرسلي لي صورتكِ وأنتِ مبتسمة على واتساب 💌</span>
-      </a>
-
-      <!-- زر نثر الزهور -->
-      <button class="flower-btn" onclick="burstFlowers()">
-        انثري زهور عيدكِ في سماء قلبي يا Naya 🌸
-      </button>
-
-      <!-- التذييل -->
-      <div class="footer">
-        صُنع بكل الحب لأجل <span class="signature">Naya</span> • 2017 - ∞
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    const CORRECT_PIN = "11112006";
-    let enteredPin = "";
-    let ytPlayer = null;
-    let isMusicPlaying = false;
-
-    // تحميل مشغل يوتيوب لتشغيل الموسيقى في الخلفية
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player('yt-player', {
-        height: '10',
-        width: '10',
-        videoId: '8zb7CzdcQb0',
-        playerVars: {
-          'autoplay': 0,
-          'controls': 0,
-          'loop': 1,
-          'playlist': '8zb7CzdcQb0',
-          'playsinline': 1,
-          'rel': 0
-        },
-        events: {
-          'onStateChange': function(event) {
-            const indicator = document.getElementById("music-indicator");
-            if (event.data === YT.PlayerState.PLAYING) {
-              isMusicPlaying = true;
-              if (indicator) indicator.innerText = "ılıll|";
-            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-              isMusicPlaying = false;
-              if (indicator) indicator.innerText = "⏸";
+        /* Fuming Flowers & Hearts around "Naya" */
+        @keyframes bloomFloat {
+            0% {
+                transform: translate(0, 0) scale(0.35) rotate(0deg);
+                opacity: 0;
             }
-          }
-        }
-      });
-    }
-
-    function toggleMusic() {
-      if (!ytPlayer || typeof ytPlayer.playVideo !== 'function') return;
-      if (isMusicPlaying) {
-        ytPlayer.pauseVideo();
-      } else {
-        ytPlayer.playVideo();
-      }
-    }
-
-    function updateDisplay() {
-      for (let i = 0; i < 8; i++) {
-        const box = document.getElementById("b" + i);
-        if (i < enteredPin.length) {
-          box.innerText = enteredPin[i];
-          box.classList.add("filled");
-        } else {
-          box.innerText = "";
-          box.classList.remove("filled");
-        }
-      }
-    }
-
-    function pressKey(num) {
-      if (enteredPin.length < 8) {
-        enteredPin += num;
-        updateDisplay();
-      }
-    }
-
-    function deleteLast() {
-      enteredPin = enteredPin.slice(0, -1);
-      updateDisplay();
-    }
-
-    function clearPin() {
-      enteredPin = "";
-      updateDisplay();
-    }
-
-    function verifyPin() {
-      if (enteredPin === CORRECT_PIN) {
-        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-          ytPlayer.setVolume(100);
-          ytPlayer.playVideo();
+            20% {
+                opacity: 1;
+                transform: translate(calc(var(--tx) * 0.25), calc(var(--ty) * 0.25)) scale(0.95) rotate(calc(var(--tr) * 0.3));
+            }
+            80% {
+                opacity: 0.85;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1.2) rotate(var(--tr));
+                opacity: 0;
+            }
         }
 
-        const lock = document.getElementById("lock-screen");
-        lock.style.opacity = "0";
-        lock.style.transform = "scale(0.9)";
-        
-        setTimeout(() => {
-          lock.style.display = "none";
-          const content = document.getElementById("content-screen");
-          content.style.display = "block";
-        }, 600);
+        .fume-blossom {
+            position: absolute;
+            pointer-events: none;
+            animation: bloomFloat var(--dur, 4s) infinite ease-out;
+            animation-delay: var(--delay, 0s);
+            filter: drop-shadow(0 0 8px rgba(255, 120, 175, 0.7));
+            z-index: 20;
+        }
 
-      } else {
-        alert("الرمز غير صحيح... جرّبي تاريخ ميلادكِ المميز 🌸");
-        clearPin();
-      }
-    }
+        /* Floating Crown / Halo Animation */
+        @keyframes gentleBob {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(1.5deg); }
+        }
+        .float-slow {
+            animation: gentleBob 4.5s infinite ease-in-out;
+        }
 
-    function burstFlowers() {
-      for (let i = 0; i < 25; i++) {
-        setTimeout(() => {
-          const heart = document.createElement("div");
-          heart.className = "touch-emoji";
-          heart.innerText = ["🌸", "💖", "🌷", "✨", "🌺"][Math.floor(Math.random() * 5)];
-          heart.style.left = Math.random() * window.innerWidth + "px";
-          heart.style.top = (window.innerHeight - 80) + "px";
-          document.body.appendChild(heart);
-          setTimeout(() => heart.remove(), 900);
-        }, i * 40);
-      }
-    }
+        /* Heartbeat Animation */
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.16); }
+            30% { transform: scale(0.96); }
+            45% { transform: scale(1.1); }
+        }
+        .heartbeat {
+            animation: heartBeat 2.4s infinite ease-in-out;
+        }
 
-    // إيموجي يتطاير من موضع الإصبع عند لمس أي مكان في الشاشة
-    const emojis = ["💖", "🌸", "✨", "💕", "🌷", "💗"];
-    document.addEventListener("pointerdown", function(e) {
-      const emojiEl = document.createElement("div");
-      emojiEl.className = "touch-emoji";
-      emojiEl.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-      emojiEl.style.left = e.clientX + "px";
-      emojiEl.style.top = e.clientY + "px";
-      document.body.appendChild(emojiEl);
+        /* 3D Flip Card Styling */
+        .perspective-1000 {
+            perspective: 1200px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            inset: 0;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
 
-      setTimeout(() => {
-        emojiEl.remove();
-      }, 900);
-    });
+        /* Equalizer Animation for Music Button */
+        @keyframes eqBar {
+            0%, 100% { height: 5px; }
+            50% { height: 16px; }
+        }
+        .eq-bar {
+            width: 3px;
+            background: #ff99c2;
+            border-radius: 2px;
+            display: inline-block;
+            animation: eqBar 1s infinite ease-in-out;
+        }
+        .eq-paused .eq-bar {
+            animation-play-state: paused;
+            height: 4px !important;
+        }
 
-    // توليد بتلات الورد المتساقطة
-    const petalsContainer = document.getElementById("petals");
-    for (let i = 0; i < 18; i++) {
-      const petal = document.createElement("div");
-      petal.className = "petal";
-      const size = Math.random() * 14 + 10;
-      petal.style.width = size + "px";
-      petal.style.height = size * 1.3 + "px";
-      petal.style.left = Math.random() * 100 + "vw";
-      petal.style.animationDuration = (Math.random() * 4 + 6) + "s";
-      petal.style.animationDelay = (Math.random() * 5) + "s";
-      petalsContainer.appendChild(petal);
-    }
-  </script>
+        /* Wax Seal Button Styling */
+        .wax-seal {
+            background: radial-gradient(circle at 30% 30%, #ff5c97, #c9185b 65%, #800936 100%);
+            box-shadow: 0 4px 14px rgba(201, 24, 91, 0.6), inset 0 2px 4px rgba(255, 200, 220, 0.5);
+            border: 2px solid rgba(255, 214, 232, 0.5);
+        }
+
+        /* Keypad Button */
+        .keypad-btn {
+            background: rgba(255, 166, 204, 0.12);
+            border: 1px solid rgba(255, 194, 222, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transition: all 0.15s ease;
+        }
+        .keypad-btn:active {
+            transform: scale(0.92);
+            background: rgba(255, 92, 151, 0.45);
+            border-color: #ff99c2;
+            box-shadow: 0 0 18px rgba(255, 92, 151, 0.6);
+        }
+
+        /* PIN Slot Dot */
+        .pin-slot {
+            width: 30px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(36, 4, 21, 0.65);
+            border: 1px solid rgba(255, 175, 209, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffc2dd;
+            transition: all 0.2s ease;
+        }
+        .pin-slot.filled {
+            background: rgba(255, 77, 136, 0.28);
+            border-color: #ff85b3;
+            box-shadow: 0 0 12px rgba(255, 77, 136, 0.45);
+            transform: translateY(-2px);
+        }
+
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .shake {
+            animation: shakeError 0.45s ease-in-out;
+        }
+
+        /* Touch Emoji Burst Effect */
+        .touch-emoji {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 1.6rem;
+            user-select: none;
+            filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.65));
+            animation: touchFloatUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes touchFloatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+            }
+            40% {
+                opacity: 1;
+                transform: translate(calc(-50% + var(--dx, 10px) * 0.5), -45px) scale(1.25) rotate(var(--rot, 12deg));
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--dx, 10px)), -95px) scale(0.9) rotate(calc(var(--rot, 12deg) * 2));
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #240615;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #9e1f5c;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="relative selection:bg-pink-500 selection:text-white">
+
+    <!-- Ambient Pink Bokeh Orbs -->
+    <div class="bokeh-orb w-72 h-72 bg-pink-500 top-[-5%] right-[-10%]"></div>
+    <div class="bokeh-orb w-80 h-80 bg-rose-600 bottom-[10%] left-[-15%]"></div>
+    <div class="bokeh-orb w-64 h-64 bg-fuchsia-500 top-[45%] right-[20%] opacity-30"></div>
+
+    <!-- Interactive Canvas for Floating Rose Petals, Sakura & Glowing Hearts -->
+    <canvas id="petals-canvas"></canvas>
+
+    <!-- Hidden YouTube Audio Player for Italian Romantic Music -->
+    <div style="position: fixed; bottom: 0; left: 0; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; z-index: -10; overflow: hidden;">
+        <div id="yt-romantic-player"></div>
+    </div>
+
+    <!-- ==========================================================
+         شريط التحكم بالموسيقى الرومانسية العائم (Floating Music Pill)
+         ========================================================== -->
+    <div id="audio-control" class="fixed top-4 left-4 z-40 hidden">
+        <button onclick="toggleRomanticMusic()" class="px-3.5 py-2 rounded-full pink-glass-light flex items-center gap-2.5 text-pink-100 shadow-lg active:scale-95 transition-all">
+            <div id="eq-container" class="flex items-end gap-0.5 h-4">
+                <span class="eq-bar" style="animation-delay: 0s;"></span>
+                <span class="eq-bar" style="animation-delay: 0.2s;"></span>
+                <span class="eq-bar" style="animation-delay: 0.4s;"></span>
+                <span class="eq-bar" style="animation-delay: 0.1s;"></span>
+            </div>
+            <span id="music-label" class="text-xs font-medium tracking-wide">سيمفونية Naya</span>
+            <span id="music-icon" class="text-sm">🌸</span>
+        </button>
+    </div>
+
+    <!-- ==========================================================
+         1. شاشة القفل الملكية الوردية (الرمز السري: 11112006)
+         ========================================================== -->
+    <div id="lock-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1c0410]/90 backdrop-blur-2xl transition-all duration-700 overflow-y-auto">
+        <div class="w-full max-w-sm pink-glass p-6 sm:p-7 rounded-[2.2rem] text-center relative overflow-hidden my-auto border border-pink-300/40">
+            
+            <!-- Top Decorative Floral Crest -->
+            <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-56 h-32 bg-pink-500/30 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="relative inline-flex items-center justify-center mb-3">
+                <div class="w-20 h-20 rounded-full pink-glass-light flex items-center justify-center heartbeat border border-pink-200/50 shadow-inner">
+                    <span class="text-4xl filter drop-shadow">💖</span>
+                </div>
+                <span class="absolute -top-1 -right-2 text-xl animate-bounce">🌸</span>
+                <span class="absolute -bottom-1 -left-2 text-lg animate-pulse">✨</span>
+            </div>
+
+            <p class="text-[11px] tracking-[0.25em] uppercase text-pink-200/80 font-semibold mb-1">Royal Rose Sanctuary</p>
+            <h2 class="text-2xl sm:text-3xl font-bold font-ruqaa rose-gradient-text mb-6">بوابة قلب Naya</h2>
+
+            <!-- 8-Digit Visual PIN Display (11 11 2006) -->
+            <div id="pin-slots-container" class="flex justify-center items-center gap-1.5 mb-2" dir="ltr">
+                <div class="pin-slot" data-index="0"></div>
+                <div class="pin-slot" data-index="1"></div>
+                <span class="text-pink-300/60 font-bold text-xs">/</span>
+                <div class="pin-slot" data-index="2"></div>
+                <div class="pin-slot" data-index="3"></div>
+                <span class="text-pink-300/60 font-bold text-xs">/</span>
+                <div class="pin-slot" data-index="4"></div>
+                <div class="pin-slot" data-index="5"></div>
+                <div class="pin-slot" data-index="6"></div>
+                <div class="pin-slot" data-index="7"></div>
+            </div>
+
+            <!-- Feedback Message -->
+            <p id="lock-error" class="text-xs text-rose-300 font-medium h-5 mb-2 opacity-0 transition-opacity">
+                الرمز غير مطابق.. 🌸
+            </p>
+
+            <!-- Custom Glassmorphic Numeric Keypad (Silent) -->
+            <div class="grid grid-cols-3 gap-2.5 max-w-[260px] mx-auto mb-5" dir="ltr">
+                <button type="button" onclick="pressDigit('1')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">1</button>
+                <button type="button" onclick="pressDigit('2')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">2</button>
+                <button type="button" onclick="pressDigit('3')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">3</button>
+                <button type="button" onclick="pressDigit('4')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">4</button>
+                <button type="button" onclick="pressDigit('5')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">5</button>
+                <button type="button" onclick="pressDigit('6')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">6</button>
+                <button type="button" onclick="pressDigit('7')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">7</button>
+                <button type="button" onclick="pressDigit('8')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">8</button>
+                <button type="button" onclick="pressDigit('9')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">9</button>
+                <button type="button" onclick="clearPin()" class="keypad-btn py-2.5 rounded-2xl text-xs font-semibold text-pink-200">مسح</button>
+                <button type="button" onclick="pressDigit('0')" class="keypad-btn py-2.5 rounded-2xl text-lg font-bold text-white">0</button>
+                <button type="button" onclick="backspacePin()" class="keypad-btn py-2.5 rounded-2xl text-sm font-semibold text-pink-200">⌫</button>
+            </div>
+
+            <button onclick="validatePin()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 text-white font-bold text-sm shadow-lg shadow-pink-600/40 border border-pink-200/40 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                <span>افتحي عالمكِ الوردي يا Naya</span>
+                <span>🌷</span>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ==========================================================
+         2. المحتوى التفاعلي الرئيسي (يظهر بعد فتح القفل)
+         ========================================================== -->
+    <main id="main-content" class="relative z-10 max-w-lg mx-auto px-4 pt-12 pb-24 flex flex-col gap-10 opacity-0 pointer-events-none transition-opacity duration-1000">
+
+        <!-- ==========================================
+             القسم الأول: التاج الملكي واسم Naya الفائح بالزهور والقلوب
+             ========================================== -->
+        <header class="text-center relative pt-4">
+            
+            <!-- شارة تاريخ الميلاد المميز 11/11/2006 -->
+            <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full pink-glass-light text-xs sm:text-sm font-semibold text-pink-100 mb-6 shadow-md">
+                <span class="text-base">🌸</span>
+                <span dir="ltr" class="font-mono tracking-wider font-bold text-white">11 / 11 / 2006</span>
+                <span class="text-pink-300">|</span>
+                <span>العام العشرون من نوركِ</span>
+                <span class="text-base">🌸</span>
+            </div>
+
+            <!-- هالة اسم Naya مع الزهور والقلوب الفائحة المتطايرة باستمرار -->
+            <div class="relative mx-auto max-w-xs py-7 px-6 my-1">
+                <!-- Glow Aura Behind Name -->
+                <div class="absolute inset-0 bg-gradient-to-r from-pink-500/25 via-rose-400/35 to-pink-500/25 rounded-full blur-2xl -z-10 animate-pulse"></div>
+                
+                <!-- Continuous Fuming Flowers & Hearts Around Naya -->
+                <span class="fume-blossom text-xl" style="top: 15%; left: 6%; --tx: -35px; --ty: -65px; --tr: -25deg; --dur: 3.8s; --delay: 0s;">🌸</span>
+                <span class="fume-blossom text-2xl" style="top: 5%; left: 26%; --tx: -15px; --ty: -75px; --tr: 18deg; --dur: 4.2s; --delay: 0.6s;">💖</span>
+                <span class="fume-blossom text-lg" style="top: 0%; left: 52%; --tx: 5px; --ty: -80px; --tr: -12deg; --dur: 3.6s; --delay: 1.3s;">🌷</span>
+                <span class="fume-blossom text-2xl" style="top: 8%; right: 20%; --tx: 25px; --ty: -70px; --tr: 28deg; --dur: 4.4s; --delay: 0.3s;">🌺</span>
+                <span class="fume-blossom text-xl" style="top: 22%; right: 4%; --tx: 40px; --ty: -55px; --tr: -30deg; --dur: 3.9s; --delay: 1.8s;">💕</span>
+                <span class="fume-blossom text-lg" style="bottom: 12%; left: 15%; --tx: -30px; --ty: -60px; --tr: 22deg; --dur: 4.5s; --delay: 0.9s;">🌹</span>
+                <span class="fume-blossom text-xl" style="bottom: 8%; right: 15%; --tx: 30px; --ty: -65px; --tr: -18deg; --dur: 4.1s; --delay: 2.2s;">💗</span>
+                <span class="fume-blossom text-base" style="bottom: 20%; left: 45%; --tx: 0px; --ty: -85px; --tr: 15deg; --dur: 3.5s; --delay: 1.5s;">✨</span>
+                <span class="fume-blossom text-lg" style="top: 35%; left: 10%; --tx: -42px; --ty: -45px; --tr: -20deg; --dur: 4.3s; --delay: 2.6s;">🦋</span>
+                <span class="fume-blossom text-lg" style="top: 35%; right: 10%; --tx: 42px; --ty: -45px; --tr: 25deg; --dur: 4.0s; --delay: 1.1s;">🌸</span>
+
+                <!-- Decorative Floral SVG Wreath Header -->
+                <div class="flex justify-center items-center gap-2 mb-1 opacity-90">
+                    <span class="h-[1px] w-12 bg-gradient-to-r from-transparent to-pink-300"></span>
+                    <span class="text-xs tracking-[0.3em] uppercase text-pink-200 font-cinzel">Beloved Princess</span>
+                    <span class="h-[1px] w-12 bg-gradient-to-l from-transparent to-pink-300"></span>
+                </div>
+
+                <!-- The Name: Naya -->
+                <div class="float-slow relative z-10">
+                    <h2 class="text-7xl sm:text-8xl font-romance naya-glow select-none py-2 leading-none">
+                        Naya
+                    </h2>
+                </div>
+
+                <!-- Floral Under-ribbon -->
+                <div class="flex justify-center items-center gap-2 mt-2">
+                    <span class="text-sm">🌷</span>
+                    <span class="text-xs text-pink-200/90 font-serif-ar italic">زهرةُ عُمري وربيعُ أيامي الدائم</span>
+                    <span class="text-sm">🌷</span>
+                </div>
+            </div>
+
+            <!-- العنوان الرئيسي: كل عام وأنت عيدي -->
+            <h1 class="text-4xl sm:text-5xl font-ruqaa font-bold rose-gradient-text mt-3 mb-4 leading-snug drop-shadow">
+                كل عام وأنتِ عيدي
+            </h1>
+
+            <p class="text-sm sm:text-base text-pink-100/95 font-serif-ar leading-relaxed max-w-md mx-auto px-3">
+                "في الحادي عشر من نوفمبر وُلدتِ أنتِ ليزهر الكون، وفي عام 2017 وُلد قلبي من جديد حين عرفتكِ.. فكبرنا معاً تسع سنواتٍ، وصرتِ لي الحياة بكل معانيها."
+            </p>
+
+            <!-- Ornate Divider -->
+            <div class="flex items-center justify-center gap-3 mt-6 opacity-80">
+                <div class="h-[1px] w-20 bg-gradient-to-r from-transparent via-pink-300 to-pink-400"></div>
+                <span class="text-pink-300 text-lg">💮</span>
+                <div class="h-[1px] w-20 bg-gradient-to-l from-transparent via-pink-300 to-pink-400"></div>
+            </div>
+        </header>
+
+
+        <!-- ==========================================
+             القسم الثاني: عداد الـ 9 سنوات (منذ 2017)
+             ========================================== -->
+        <section class="pink-glass p-6 sm:p-7 rounded-[2rem] relative overflow-hidden">
+            <!-- Subtle Corner Roses -->
+            <div class="absolute -top-6 -left-6 w-28 h-28 bg-pink-400/20 rounded-full blur-xl pointer-events-none"></div>
+            <div class="absolute -bottom-6 -right-6 w-28 h-28 bg-rose-500/20 rounded-full blur-xl pointer-events-none"></div>
+
+            <div class="text-center mb-5">
+                <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-pink-500/25 border border-pink-300/40 text-xs text-pink-100 mb-2">
+                    <span>💞</span>
+                    <span>منذ عام 2017 وحتى الأبد</span>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-bold font-ruqaa rose-gradient-text">
+                    9 سنوات من الحب والارتباط الروحي
+                </h3>
+                <p class="text-xs text-pink-200/80 mt-1">كل ثانية تمرّ معكِ يا Naya هي عمرٌ كامل من الجمال</p>
+            </div>
+
+            <!-- إبراز رقم 9 سنوات بشكل ملكي -->
+            <div class="pink-glass-light rounded-2xl p-4 mb-4 text-center border border-pink-200/40 flex items-center justify-around">
+                <div>
+                    <span class="block text-xs text-pink-200">البداية الخالدة</span>
+                    <span class="text-xl font-bold font-mono text-white">2017</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full wax-seal flex flex-col items-center justify-center heartbeat">
+                        <span class="text-2xl font-bold text-white leading-none font-mono">9</span>
+                        <span class="text-[10px] text-pink-100">سنوات</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="block text-xs text-pink-200">ميلادكِ المشرق</span>
+                    <span class="text-xl font-bold font-mono text-white">11/11</span>
+                </div>
+            </div>
+
+            <!-- Live Ticking Details Counter -->
+            <div class="grid grid-cols-4 gap-2.5 text-center mb-5" dir="ltr">
+                <div class="bg-[#280617]/75 rounded-2xl p-3 border border-pink-300/30 shadow-inner">
+                    <span id="count-days" class="block text-xl sm:text-2xl font-bold text-pink-200 font-mono">3287</span>
+                    <span class="text-[11px] text-pink-300/80">يوماً</span>
+                </div>
+                <div class="bg-[#280617]/75 rounded-2xl p-3 border border-pink-300/30 shadow-inner">
+                    <span id="count-hours" class="block text-xl sm:text-2xl font-bold text-pink-200 font-mono">00</span>
+                    <span class="text-[11px] text-pink-300/80">ساعة</span>
+                </div>
+                <div class="bg-[#280617]/75 rounded-2xl p-3 border border-pink-300/30 shadow-inner">
+                    <span id="count-minutes" class="block text-xl sm:text-2xl font-bold text-pink-200 font-mono">00</span>
+                    <span class="text-[11px] text-pink-300/80">دقيقة</span>
+                </div>
+                <div class="bg-[#280617]/75 rounded-2xl p-3 border border-pink-300/30 shadow-inner">
+                    <span id="count-seconds" class="block text-xl sm:text-2xl font-bold text-rose-400 font-mono">00</span>
+                    <span class="text-[11px] text-pink-300/80">ثانية</span>
+                </div>
+            </div>
+
+            <!-- Philosophical Quote inside Counter -->
+            <div class="p-4 rounded-2xl bg-pink-950/50 border border-pink-300/25 text-center">
+                <p class="text-xs sm:text-sm text-pink-100 font-serif-ar leading-relaxed">
+                    "الزمن عند الفلاسفة يُقاس بحركة العقارب، أما زمني أنا فقد بدأ منذ اللحظة التي أبصرتكِ فيها روحي عام 2017؛ تسعُ سنواتٍ لم نكبر فيها فحسب، بل اتّحدت فيها أرواحنا حتى صرتِ أنتِ المعنى وأنا الأثر."
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             القسم الثالث: البطاقات الفلسفية المنقلبة (3D Rose Cards)
+             ========================================== -->
+        <section>
+            <div class="text-center mb-5">
+                <span class="text-xs text-pink-300 tracking-wider font-medium">تأملات عميقة في محراب حبكِ</span>
+                <h3 class="text-2xl font-bold font-ruqaa rose-gradient-text mt-1">فلسفة وجودكِ في حياتي</h3>
+                <p class="text-xs text-pink-200/75 mt-1">المسي كل بطاقة لتنقلب وتكشف ما خُطّ لقلبكِ 🌸</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3.5">
+                <!-- Card 1 -->
+                <div class="h-64 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front pink-glass p-5 flex flex-col justify-between items-center border border-pink-300/40">
+                            <div class="w-12 h-12 rounded-2xl pink-glass-light flex items-center justify-center text-2xl shadow-md">
+                                🌸
+                            </div>
+                            <div class="text-center my-auto">
+                                <span class="text-[11px] text-pink-300 font-mono">2017 — 2026</span>
+                                <h4 class="font-bold text-lg text-white font-ruqaa mt-1">حتميّة اللقاء</h4>
+                                <p class="text-[11px] text-pink-200/80 mt-1">كيف اختصرتِ الكون</p>
+                            </div>
+                            <span class="text-[10px] text-pink-100 bg-pink-500/30 border border-pink-300/40 px-3 py-1 rounded-full">المسي للقلب ✨</span>
+                        </div>
+                        <div class="flip-card-back pink-glass-light p-4 flex flex-col justify-center items-center text-center border border-pink-200/60">
+                            <span class="text-lg mb-1">🌷</span>
+                            <p class="text-xs sm:text-sm text-white font-serif-ar leading-relaxed">
+                                "لم يكن لقاؤنا في 2017 مصادفةً عابرة، بل كان استجابةً قدرية لروحين كانتا تبحثان عن وطنهما الأبدي قبل أن يلتقيا."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="h-64 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front pink-glass p-5 flex flex-col justify-between items-center border border-pink-300/40">
+                            <div class="w-12 h-12 rounded-2xl pink-glass-light flex items-center justify-center text-2xl shadow-md">
+                                🦢
+                            </div>
+                            <div class="text-center my-auto">
+                                <span class="text-[11px] text-pink-300">جوهر السكينة</span>
+                                <h4 class="font-bold text-lg text-white font-ruqaa mt-1">صمتُ الأرواح</h4>
+                                <p class="text-[11px] text-pink-200/80 mt-1">أعمق من كل اللغات</p>
+                            </div>
+                            <span class="text-[10px] text-pink-100 bg-pink-500/30 border border-pink-300/40 px-3 py-1 rounded-full">المسي للقلب ✨</span>
+                        </div>
+                        <div class="flip-card-back pink-glass-light p-4 flex flex-col justify-center items-center text-center border border-pink-200/60">
+                            <span class="text-lg mb-1">💖</span>
+                            <p class="text-xs sm:text-sm text-white font-serif-ar leading-relaxed">
+                                "الحب السطحي يحتاج إلى ضجيج الكلمات ليثبت وجوده، أما حبنا يا Naya فهو تلك الطمأنينة العميقة التي تملأ القلب بمجرد طيفكِ."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="h-64 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front pink-glass p-5 flex flex-col justify-between items-center border border-pink-300/40">
+                            <div class="w-12 h-12 rounded-2xl pink-glass-light flex items-center justify-center text-2xl shadow-md">
+                                🌺
+                            </div>
+                            <div class="text-center my-auto">
+                                <span class="text-[11px] text-pink-300 font-mono">11 / 11 / 2006</span>
+                                <h4 class="font-bold text-lg text-white font-ruqaa mt-1">ميلادُ الجمال</h4>
+                                <p class="text-[11px] text-pink-200/80 mt-1">عشرون عاماً من النور</p>
+                            </div>
+                            <span class="text-[10px] text-pink-100 bg-pink-500/30 border border-pink-300/40 px-3 py-1 rounded-full">المسي للقلب ✨</span>
+                        </div>
+                        <div class="flip-card-back pink-glass-light p-4 flex flex-col justify-center items-center text-center border border-pink-200/60">
+                            <span class="text-lg mb-1">👑</span>
+                            <p class="text-xs sm:text-sm text-white font-serif-ar leading-relaxed">
+                                "حين أتممتِ عامكِ العشرين، أدركتُ أن الجمال الحقيقي ليس في الملامح فحسب، بل في نقاء روحكِ التي تزداد إشراقاً ونضجاً كل عام."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="h-64 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front pink-glass p-5 flex flex-col justify-between items-center border border-pink-300/40">
+                            <div class="w-12 h-12 rounded-2xl pink-glass-light flex items-center justify-center text-2xl shadow-md">
+                                🪐
+                            </div>
+                            <div class="text-center my-auto">
+                                <span class="text-[11px] text-pink-300">الوطن الأبدي</span>
+                                <h4 class="font-bold text-lg text-white font-ruqaa mt-1">أنتِ الاتجاه</h4>
+                                <p class="text-[11px] text-pink-200/80 mt-1">حين يتيه العالم</p>
+                            </div>
+                            <span class="text-[10px] text-pink-100 bg-pink-500/30 border border-pink-300/40 px-3 py-1 rounded-full">المسي للقلب ✨</span>
+                        </div>
+                        <div class="flip-card-back pink-glass-light p-4 flex flex-col justify-center items-center text-center border border-pink-200/60">
+                            <span class="text-lg mb-1">🌹</span>
+                            <p class="text-xs sm:text-sm text-white font-serif-ar leading-relaxed">
+                                "كل الطرق في هذا العالم تقود إلى أماكن، إلا طريقي إليكِ يا Naya؛ فإنه يقودني إلى نفسي، وإلى السلام الذي لا أجده إلا في عينيكِ."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             القسم الرابع: أظرف "افتحيها عندما..." المختومة بالشمع الوردي
+             ========================================== -->
+        <section>
+            <div class="text-center mb-5">
+                <span class="text-xs text-pink-300 tracking-wider font-medium">رسائل مختومة بنبض القلب</span>
+                <h3 class="text-2xl font-bold font-ruqaa rose-gradient-text mt-1">أظرفٌ سرية لقلب Naya</h3>
+                <p class="text-xs text-pink-200/75 mt-1">افتحي كل ظرف في اللحظة التي يناديكِ فيها شعوركِ 💌</p>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <!-- Envelope 1 -->
+                <button onclick="openLetter(1)" class="w-full p-4 rounded-3xl pink-glass border border-pink-300/35 flex items-center justify-between hover:border-pink-200/70 active:scale-[0.99] transition-all text-right group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-full wax-seal flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                            🌷
+                        </div>
+                        <div>
+                            <h5 class="text-sm sm:text-base font-bold text-white">افتحيها عندما يهمسُ لكِ الحنين</h5>
+                            <span class="text-xs text-pink-200/75">حين تشتاقين لي وتفصلنا المسافات</span>
+                        </div>
+                    </div>
+                    <span class="text-xs text-white bg-pink-500/40 border border-pink-200/40 px-3.5 py-1.5 rounded-full shrink-0">فتح الظرف</span>
+                </button>
+
+                <!-- Envelope 2 -->
+                <button onclick="openLetter(2)" class="w-full p-4 rounded-3xl pink-glass border border-pink-300/35 flex items-center justify-between hover:border-pink-200/70 active:scale-[0.99] transition-all text-right group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-full wax-seal flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                            🕊️
+                        </div>
+                        <div>
+                            <h5 class="text-sm sm:text-base font-bold text-white">افتحيها إن شعرتِ بتعب الأيام</h5>
+                            <span class="text-xs text-pink-200/75">حين تحتاج روحكِ إلى عناقٍ وأمان</span>
+                        </div>
+                    </div>
+                    <span class="text-xs text-white bg-pink-500/40 border border-pink-200/40 px-3.5 py-1.5 rounded-full shrink-0">فتح الظرف</span>
+                </button>
+
+                <!-- Envelope 3 -->
+                <button onclick="openLetter(3)" class="w-full p-4 rounded-3xl pink-glass border border-pink-300/35 flex items-center justify-between hover:border-pink-200/70 active:scale-[0.99] transition-all text-right group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-full wax-seal flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                            👑
+                        </div>
+                        <div>
+                            <h5 class="text-sm sm:text-base font-bold text-white">افتحيها لتري مكانتكِ في عيني</h5>
+                            <span class="text-xs text-pink-200/75">لماذا أنتِ استثنائية عن كل العالم؟</span>
+                        </div>
+                    </div>
+                    <span class="text-xs text-white bg-pink-500/40 border border-pink-200/40 px-3.5 py-1.5 rounded-full shrink-0">فتح الظرف</span>
+                </button>
+
+                <!-- Envelope 4 -->
+                <button onclick="openLetter(4)" class="w-full p-4 rounded-3xl pink-glass border border-pink-300/35 flex items-center justify-between hover:border-pink-200/70 active:scale-[0.99] transition-all text-right group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-full wax-seal flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+                            💖
+                        </div>
+                        <div>
+                            <h5 class="text-sm sm:text-base font-bold text-white">افتحيها في لحظة صفاءٍ وابتسامة</h5>
+                            <span class="text-xs text-pink-200/75">وعدُ السنوات القادمة معاً</span>
+                        </div>
+                    </div>
+                    <span class="text-xs text-white bg-pink-500/40 border border-pink-200/40 px-3.5 py-1.5 rounded-full shrink-0">فتح الظرف</span>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             القسم الخامس: الرسالة الملكية الختامية + خانة الواتساب المخصصة
+             ========================================== -->
+        <section class="pink-glass p-6 sm:p-8 rounded-[2.2rem] border border-pink-200/45 relative overflow-hidden shadow-2xl">
+            <!-- Top & Bottom Rose Glows -->
+            <div class="absolute -top-12 -right-12 w-44 h-44 bg-pink-400/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-44 h-44 bg-rose-500/25 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Letter Header -->
+            <div class="text-center border-b border-pink-300/30 pb-5 mb-6">
+                <span class="text-3xl inline-block mb-1">🌸</span>
+                <h4 class="font-ruqaa text-2xl sm:text-3xl rose-gradient-text font-bold">إلى أميرتي وحبيبتي الأبدية Naya</h4>
+                <div class="flex items-center justify-center gap-2 mt-2 text-xs text-pink-200/85">
+                    <span dir="ltr" class="font-mono">11 / 11 / 2006</span>
+                    <span>•</span>
+                    <span>عشرون عاماً من الجمال، وتسعُ سنين من العشق</span>
+                </div>
+            </div>
+
+            <!-- Deep Philosophical Romantic Letter Body -->
+            <div class="space-y-4 font-serif-ar text-base sm:text-lg leading-loose text-pink-50/95 text-justify px-1">
+                <p>
+                    يا أجملَ قدرٍ كتبَه الله لقلبي.. يا <strong class="text-pink-200 font-sans">Naya</strong>. حين أقف اليوم أمام ذكرى ميلادكِ في <span dir="ltr" class="text-pink-200 font-mono text-sm">11/11/2006</span>، أشعر أن هذا التاريخ لم يكن مجرد يومٍ وُلدت فيه فتاةٌ جميلة، بل كان اليوم الذي أودع الله فيه سرّ سعادتي وسكينتي في هذا العالم.
+                </p>
+                <p>
+                    تسعُ سنواتٍ مضت منذ عام 2017؛ تسعُ سنواتٍ لم تكن مجرد أرقامٍ تطوى في كتاب الأيام، بل كانت رحلةً فلسفية عميقة عرفتُ فيها أن الحب الحقيقي لا يبهت بمرور الزمن، بل يتجذّر في الروح كما تتجذّر الوردة في أرضها. كبرنا معاً، وتبدّلت فصول الحياة حولنا، وبقيتِ أنتِ وحدكِ الربيع الثابت الذي لا يغادر قلبي.
+                </p>
+                <p>
+                    أنتِ لستِ فقط حبيبتي التي أميّزها عن كل العالم، بل أنتِ مرآة روحي، والقصيدة التي عجزت كل اللغات عن الإحاطة بجمالها. في عامكِ العشرين، أعدكِ أن أبقى لكِ السند والأمان، والحبيب الذي يرى في عينيكِ وطنه الأول والأخير.
+                </p>
+                <p class="text-center font-bold text-pink-200 text-lg sm:text-xl pt-2">
+                    "كل عام وأنتِ عيدي، وكل عام وأنتِ النور الذي تشرق به حياتي يا Naya 🌸"
+                </p>
+            </div>
+
+            <!-- Interactive Celebration Finale & WhatsApp Action -->
+            <div class="mt-8 pt-6 border-t border-pink-300/30 text-center space-y-3.5">
+                
+                <!-- خانة الواتساب المباشرة لرقمك +963996183867 -->
+                <a href="https://wa.me/963996183867?text=%D9%87%D8%A7%D9%8A%20%D9%8A%D8%A7%20%D8%B1%D9%88%D8%AD%D9%8A%20%D9%82%D8%B1%D8%A3%D8%AA%20%D9%83%D9%84%20%D9%83%D9%84%D9%85%D8%A9%20%D9%88%D9%87%D8%A7%D9%8A%20%D8%B5%D9%88%D8%B1%D8%AA%D9%8A%20%D9%88%D8%A3%D9%86%D8%A7%20%D9%85%D8%A8%D8%AA%D8%B3%D9%85%D8%A9%20%D9%85%D8%AB%D9%84%20%D9%85%D8%A7%20%D8%B7%D9%84%D8%A8%D8%AA%20%F0%9F%92%8C%F0%9F%8C%B8" target="_blank" class="w-full py-4 rounded-2xl pink-glass-light border border-pink-200/60 text-white font-bold text-sm sm:text-base shadow-lg shadow-pink-500/25 hover:bg-pink-500/30 active:scale-95 transition-all flex items-center justify-center gap-2.5">
+                    <span>أرسلي لي صورتكِ وأنتِ مبتسمة على واتساب</span>
+                    <span class="text-xl">💌</span>
+                </a>
+
+                <button onclick="celebrateNayaBirthday()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 text-white font-bold text-base shadow-xl shadow-pink-600/40 border border-pink-200/50 hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2.5">
+                    <span>انثري زهور عيدكِ في سماء قلبي يا Naya</span>
+                    <span class="text-xl">🌸💖</span>
+                </button>
+
+                <!-- Hidden Surprise Toast inside Finale -->
+                <div id="finale-wish-banner" class="mt-4 p-4 rounded-2xl pink-glass-light border border-pink-200/50 hidden transform transition-all duration-500">
+                    <p class="font-ruqaa text-lg text-white mb-1">✨ دمتِ لقلبي أميرةً لا يشبهها أحد ✨</p>
+                    <p class="text-xs text-pink-100 font-serif-ar">كل بتلة وردٍ تتساقط الآن تحمل دعوةً من قلبي بأن يحفظكِ الله لي إلى الأبد</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Crest -->
+        <footer class="text-center pt-2 pb-6 opacity-80">
+            <div class="inline-flex items-center gap-2 text-xs text-pink-200/80 font-serif-ar">
+                <span>صُنع بكل الحب لأجل</span>
+                <span class="font-romance text-xl text-pink-200">Naya</span>
+                <span>•</span>
+                <span class="font-mono">2017 — ∞</span>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- ==========================================================
+         3. النافذة المنبثقة لقراءة الأظرف (Romantic Letter Modal)
+         ========================================================== -->
+    <div id="letter-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#18030e]/85 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="letter-modal-box" class="w-full max-w-sm pink-glass p-6 sm:p-7 rounded-[2rem] border border-pink-200/50 text-center relative transform scale-95 transition-transform duration-300 shadow-2xl">
+            
+            <div id="modal-icon" class="w-16 h-16 mx-auto mb-3 rounded-full wax-seal flex items-center justify-center text-3xl heartbeat">
+                💌
+            </div>
+
+            <h3 id="modal-title" class="text-xl font-bold font-ruqaa rose-gradient-text mb-3">عنوان الرسالة</h3>
+            
+            <div class="p-4 sm:p-5 rounded-2xl bg-[#240515]/70 border border-pink-300/30 mb-5 max-h-64 overflow-y-auto shadow-inner">
+                <p id="modal-body" class="text-sm sm:text-base font-serif-ar leading-loose text-pink-50 text-justify">
+                    محتوى الرسالة..
+                </p>
+            </div>
+
+            <button onclick="closeLetter()" class="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs sm:text-sm font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-1.5">
+                <span>ضمّي هذه الكلمات إلى قلبكِ</span>
+                <span>🌸</span>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ==========================================================
+         البرمجيات التفاعلية والموسيقى الرومانسية (JavaScript)
+         ========================================================== -->
+    <script>
+        /* ========================================================
+           0. تأثير اللمسات الرومانسية (إيموجي مكان إصبعها عند لمس الشاشة)
+           ======================================================== */
+        const tapEmojis = ['💖', '🌸', '✨', '💕', '🌷', '💗', '🌺'];
+        document.addEventListener('pointerdown', (e) => {
+            const emoji = document.createElement('span');
+            emoji.className = 'touch-emoji';
+            emoji.textContent = tapEmojis[Math.floor(Math.random() * tapEmojis.length)];
+            emoji.style.left = `${e.clientX}px`;
+            emoji.style.top = `${e.clientY}px`;
+            emoji.style.setProperty('--dx', `${(Math.random() - 0.5) * 45}px`);
+            emoji.style.setProperty('--rot', `${(Math.random() - 0.5) * 35}deg`);
+            document.body.appendChild(emoji);
+            setTimeout(() => emoji.remove(), 950);
+        });
+
+        /* ========================================================
+           1. نظام لوحة المفاتيح والقفل برمز (11112006) صامت تماماً بدون أصوات نقر
+           ======================================================== */
+        const SECRET_PIN = "11112006";
+        let currentPin = "";
+
+        function updatePinSlots() {
+            const slots = document.querySelectorAll('.pin-slot');
+            slots.forEach((slot, idx) => {
+                if (idx < currentPin.length) {
+                    slot.textContent = currentPin[idx];
+                    slot.classList.add('filled');
+                } else {
+                    slot.textContent = '';
+                    slot.classList.remove('filled');
+                }
+            });
+        }
+
+        function pressDigit(digit) {
+            if (currentPin.length < 8) {
+                currentPin += digit;
+                updatePinSlots();
+                document.getElementById('lock-error').classList.add('opacity-0');
+
+                if (currentPin.length === 8) {
+                    setTimeout(validatePin, 220);
+                }
+            }
+        }
+
+        function backspacePin() {
+            if (currentPin.length > 0) {
+                currentPin = currentPin.slice(0, -1);
+                updatePinSlots();
+            }
+        }
+
+        function clearPin() {
+            currentPin = "";
+            updatePinSlots();
+        }
+
+        function validatePin() {
+            const lockError = document.getElementById('lock-error');
+            const slotsContainer = document.getElementById('pin-slots-container');
+
+            if (currentPin === SECRET_PIN) {
+                lockError.classList.add('opacity-0');
+                const lockScreen = document.getElementById('lock-screen');
+                lockScreen.style.opacity = '0';
+                lockScreen.style.pointerEvents = 'none';
+
+                startRomanticSymphony();
+
+                setTimeout(() => {
+                    lockScreen.style.display = 'none';
+                    const mainContent = document.getElementById('main-content');
+                    mainContent.classList.remove('opacity-0', 'pointer-events-none');
+                    document.getElementById('audio-control').classList.remove('hidden');
+                    launchPinkRoseBurst();
+                }, 650);
+            } else {
+                lockError.classList.remove('opacity-0');
+                slotsContainer.classList.add('shake');
+                setTimeout(() => {
+                    slotsContainer.classList.remove('shake');
+                    currentPin = "";
+                    updatePinSlots();
+                }, 500);
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            const lockScreen = document.getElementById('lock-screen');
+            if (lockScreen.style.display === 'none') return;
+
+            if (e.key >= '0' && e.key <= '9') {
+                pressDigit(e.key);
+            } else if (e.key === 'Backspace') {
+                backspacePin();
+            } else if (e.key === 'Enter') {
+                validatePin();
+            }
+        });
+
+        /* ========================================================
+           2. تساقط بتلات الورد والقلوب السابحة في الخلفية (Canvas)
+           ======================================================== */
+        const canvas = document.getElementById('petals-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class RomanticParticle {
+            constructor() {
+                this.reset(true);
+            }
+            reset(initial = false) {
+                this.x = Math.random() * canvas.width;
+                this.y = initial ? Math.random() * canvas.height : -30;
+                this.size = Math.random() * 2.2 + 1.1;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.speedY = Math.random() * 0.85 + 0.35; // تساقط انسيابي من الأعلى للأسفل
+                this.sway = Math.random() * 0.025 + 0.01;
+                this.angle = Math.random() * Math.PI * 2;
+                this.opacity = Math.random() * 0.65 + 0.25;
+                const r = Math.random();
+                if (r > 0.60) this.symbol = '🌸';
+                else if (r > 0.35) this.symbol = '🌷';
+                else if (r > 0.15) this.symbol = '💖';
+                else this.symbol = '✨';
+            }
+            update() {
+                this.angle += this.sway;
+                this.x += this.speedX + Math.sin(this.angle) * 0.45;
+                this.y += this.speedY;
+                if (this.y > canvas.height + 30 || this.x < -30 || this.x > canvas.width + 30) {
+                    this.reset(false);
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.font = `${Math.floor(this.size * 7)}px serif`;
+                ctx.fillText(this.symbol, this.x, this.y);
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) {
+            particles.push(new RomanticParticle());
+        }
+
+        function animatePetals() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animatePetals);
+        }
+        animatePetals();
+
+
+        /* ========================================================
+           3. عداد السنوات التسع منذ 2017
+           ======================================================== */
+        function updateNineYearCounter() {
+            const start = new Date('2017-01-01T00:00:00');
+            const now = new Date();
+            const diff = Math.max(0, now - start);
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const mins = Math.floor((diff / (1000 * 60)) % 60);
+            const secs = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('count-days').textContent = days;
+            document.getElementById('count-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('count-minutes').textContent = String(mins).padStart(2, '0');
+            document.getElementById('count-seconds').textContent = String(secs).padStart(2, '0');
+        }
+        setInterval(updateNineYearCounter, 1000);
+        updateNineYearCounter();
+
+
+        /* ========================================================
+           4. البطاقات المنقلبة وأظرف الرسائل الفلسفية
+           ======================================================== */
+        function flipCard(cardEl) {
+            const inner = cardEl.querySelector('.flip-card-inner');
+            inner.classList.toggle('flipped');
+        }
+
+        const lettersData = {
+            1: {
+                title: "عندما يهمسُ لكِ الحنين يا Naya...",
+                icon: "🌷",
+                body: "اعلمي يا أميرتي أن الشوق بين الأرواح المتآلفة ليس غياباً، بل هو حضورٌ مكثف في الوجدان. حين تشتاقين لي، ضعي يدكِ على قلبكِ؛ فهناك أسكن أنا منذ تسع سنوات، لا تفصلني عنكِ مسافة ولا يغيبني عنكِ مكان."
+            },
+            2: {
+                title: "إن شعرتِ بتعب الأيام...",
+                icon: "🕊️",
+                body: "لا تحملي ثقل العالم وحدكِ يا Naya وأنا بجانبكِ. استريحي في قلبي، واتركي لي كل ما يرهق تفكيركِ. خُلقت يداي لتكونا أماناً ليديكِ، وخُلق صدري ليكون الملاذ الذي تهدأ فيه كل عواصفكِ."
+            },
+            3: {
+                title: "مكانتكِ الاستثنائية في عيني...",
+                icon: "👑",
+                body: "لو اجتمع نساء العالم في كفة، وابتسامة واحدة من ثغركِ يا Naya في كفة، لرجحت كفتكِ بقلبي وعقلي وروحي. أنتِ لستِ شخصاً عابراً في قصتي، بل أنتِ القصة كلها منذ 2017 وإلى آخر العمر."
+            },
+            4: {
+                title: "وعدُ السنوات القادمة معاً...",
+                icon: "💖",
+                body: "ها نحن نحتفل بعامكِ العشرين وبتسع سنواتٍ من حبنا، ووعدي لكِ أن تكون سنواتنا القادمة أكثر دفئاً وعمقاً وجمالاً. سأظل أحبكِ في كل يومٍ وكأنني أكتشف سحركِ للمرة الأولى."
+            }
+        };
+
+        function openLetter(id) {
+            const item = lettersData[id];
+            if (!item) return;
+
+            document.getElementById('modal-title').textContent = item.title;
+            document.getElementById('modal-icon').textContent = item.icon;
+            document.getElementById('modal-body').textContent = item.body;
+
+            const modal = document.getElementById('letter-modal');
+            const box = document.getElementById('letter-modal-box');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            box.classList.remove('scale-95');
+            box.classList.add('scale-100');
+        }
+
+        function closeLetter() {
+            const modal = document.getElementById('letter-modal');
+            const box = document.getElementById('letter-modal-box');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            box.classList.add('scale-95');
+            box.classList.remove('scale-100');
+        }
+
+
+        /* ========================================================
+           5. احتفالية الزهور والقلوب الوردية
+           ======================================================== */
+        function launchPinkRoseBurst() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 70,
+                    spread: 90,
+                    origin: { y: 0.6 },
+                    colors: ['#ff4d88', '#ff85b3', '#ffc2dd', '#ffffff', '#f7c59f']
+                });
+            }
+        }
+
+        function celebrateNayaBirthday() {
+            launchPinkRoseBurst();
+            setTimeout(() => {
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 50,
+                        angle: 60,
+                        spread: 65,
+                        origin: { x: 0, y: 0.65 },
+                        colors: ['#ff4d88', '#ff99c2', '#ffd1e3']
+                    });
+                    confetti({
+                        particleCount: 50,
+                        angle: 120,
+                        spread: 65,
+                        origin: { x: 1, y: 0.65 },
+                        colors: ['#ff4d88', '#ff99c2', '#ffd1e3']
+                    });
+                }
+            }, 300);
+
+            const banner = document.getElementById('finale-wish-banner');
+            banner.classList.remove('hidden');
+        }
+
+
+        /* ========================================================
+           6. مشغل الموسيقى الإيطالية الرومانسية من يوتيوب (8zb7CzdcQb0)
+           ======================================================== */
+        let ytPlayer = null;
+        let isMusicPlaying = false;
+        let wantToPlay = false;
+
+        const ytScript = document.createElement('script');
+        ytScript.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(ytScript);
+
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('yt-romantic-player', {
+                height: '10',
+                width: '10',
+                videoId: '8zb7CzdcQb0',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': '8zb7CzdcQb0',
+                    'playsinline': 1,
+                    'rel': 0
+                },
+                events: {
+                    'onReady': (event) => {
+                        event.target.setVolume(100);
+                        if (wantToPlay) {
+                            event.target.playVideo();
+                        }
+                    },
+                    'onStateChange': (event) => {
+                        const eq = document.getElementById('eq-container');
+                        const label = document.getElementById('music-label');
+                        if (event.data === YT.PlayerState.PLAYING) {
+                            isMusicPlaying = true;
+                            eq.classList.remove('eq-paused');
+                            label.textContent = 'سيمفونية Naya';
+                        } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                            isMusicPlaying = false;
+                            eq.classList.add('eq-paused');
+                            label.textContent = 'تشغيل الموسيقى';
+                        }
+                    }
+                }
+            });
+        }
+
+        function startRomanticSymphony() {
+            wantToPlay = true;
+            if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                ytPlayer.setVolume(100);
+                ytPlayer.playVideo();
+            }
+        }
+
+        function toggleRomanticMusic() {
+            if (!ytPlayer || typeof ytPlayer.playVideo !== 'function') return;
+            if (isMusicPlaying) {
+                ytPlayer.pauseVideo();
+            } else {
+                ytPlayer.playVideo();
+            }
+        }
+    </script>
 </body>
 </html>
