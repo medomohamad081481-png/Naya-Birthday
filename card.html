@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطاقة تفاعلية احترافية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            overflow-y: auto;
+        }
+
+        /* شاشة القفل */
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 32, 39, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        #lockScreen h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 0 20px;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        #lockInput {
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            border: none;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            width: 250px;
+        }
+
+        #unlockBtn {
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background: linear-gradient(45deg, #00b09b, #96c93d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 176, 155, 0.3);
+            transition: transform 0.3s;
+        }
+
+        #unlockBtn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* رسالة الخطأ الغاضبة */
+        #errorMessage {
+            color: #ff3333;
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-15px); }
+            50% { transform: translateX(15px); }
+            75% { transform: translateX(-15px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* حاوية البطاقات */
+        #mainContent {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .scene {
+            width: 350px;
+            height: 250px;
+            perspective: 1200px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            text-align: center;
+            padding: 30px;
+            background: rgba(25, 25, 25, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(43, 15, 25, 0.85), rgba(26, 26, 46, 0.85));
+        }
+
+        .image-back {
+            padding: 0;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .image-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            line-height: 1.5;
+            font-weight: 700;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .btn-yes {
+            background: linear-gradient(45deg, #00b09b, #96c93d);
+            color: white;
+        }
+
+        .btn-no {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+        }
+
+        .btn-image {
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-disabled {
+            background: rgba(85, 85, 85, 0.5) !important;
+            cursor: not-allowed;
+            color: #999;
+            box-shadow: none;
+        }
+
+        .btn-reset {
+            margin-top: 25px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #e2e8f0;
+            padding: 10px 30px;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 15px;
+            z-index: 10;
+        }
+
+        .btn-reset:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- تم وضع رابط مباشر لضحكة هستيرية جاهزة تعمل عبر الإنترنت -->
+    <audio id="laughSound" src="https://actions.google.com/sounds/v1/human_voices/male_laugh_cackle.ogg" preload="auto"></audio>
+
+    <!-- شاشة القفل -->
+    <div id="lockScreen">
+        <h2>رمز القفل هو رقم موبايل معلمك وتاج راسك 😎</h2>
+        <input type="password" id="lockInput" placeholder="أدخل الرمز هنا...">
+        <button id="unlockBtn" onclick="checkLock()">دخول</button>
+        <div id="errorMessage">خريان عليكي انا 🤬</div>
+    </div>
+
+    <!-- المحتوى الرئيسي للبطاقات -->
+    <div id="mainContent">
+        <!-- البطاقة الأولى -->
+        <div class="scene">
+            <div class="card" id="flipCard1">
+                <div class="card-face card-front">
+                    <h2>بتنزلي عالبيت ؟</h2>
+                    <div class="buttons">
+                        <button class="btn-yes" onclick="flipCard1('yes', event)">اي</button>
+                        <button class="btn-no" onclick="flipCard1('no', event)">لاء</button>
+                    </div>
+                </div>
+                
+                <div class="card-face card-back">
+                    <h2 id="backText1"></h2>
+                    <button class="btn-reset" style="position: static;" onclick="resetCard1(event)">رجوع</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- البطاقة الثانية -->
+        <div class="scene">
+            <div class="card" id="flipCard2">
+                <div class="card-face card-front">
+                    <h2>تعي مصيلي</h2>
+                    <button id="btnCard2" class="btn-image btn-disabled" onclick="flipCard2(event)">اضغطي هنا</button>
+                </div>
+                
+                <!-- الوجه الخلفي بأكمله قابل للنقر للعودة -->
+                <div class="card-face card-back image-back" onclick="resetCard2(event)">
+                    <img src="6010452422179885099_119.jpg" alt="صورة">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isFirstCardFlipped = false;
+
+        function checkLock() {
+            const input = document.getElementById('lockInput').value;
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if(input === '0996183867') {
+                errorMsg.style.display = 'none';
+                document.getElementById('lockScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('lockScreen').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'flex';
+                }, 300);
+            } else {
+                errorMsg.style.display = 'block';
+                errorMsg.style.animation = 'none';
+                setTimeout(() => {
+                    errorMsg.style.animation = 'shake 0.4s ease-in-out';
+                }, 10);
+            }
+        }
+
+        function flipCard1(answer, event) {
+            event.stopPropagation();
+            const card = document.getElementById('flipCard1');
+            const backText = document.getElementById('backText1');
+            const btnCard2 = document.getElementById('btnCard2');
+            
+            backText.style.opacity = '0';
+            
+            setTimeout(() => {
+                if(answer === 'yes') {
+                    backText.innerText = "بدي نيكك لكن بس ننزل 😂";
+                } else if(answer === 'no') {
+                    backText.innerText = "كمان بدي نيكك اذا ما نزلتي 😒";
+                }
+                backText.style.transition = 'opacity 0.5s ease';
+                backText.style.opacity = '1';
+            }, 300);
+            
+            card.classList.add('is-flipped');
+            
+            isFirstCardFlipped = true;
+            btnCard2.classList.remove('btn-disabled');
+        }
+
+        function resetCard1(event) {
+            event.stopPropagation();
+            document.getElementById('flipCard1').classList.remove('is-flipped');
+        }
+
+        function flipCard2(event) {
+            event.stopPropagation();
+            if(!isFirstCardFlipped) {
+                alert('عليك الإجابة على البطاقة الأولى أولاً! 😉');
+                return;
+            }
+            
+            const laugh = document.getElementById('laughSound');
+            laugh.currentTime = 0; 
+            laugh.play().catch(e => console.log("تحتاج للضغط أولاً لتفعيل الصوت"));
+
+            document.getElementById('flipCard2').classList.add('is-flipped');
+        }
+
+        function resetCard2(event) {
+            event.stopPropagation();
+            document.getElementById('flipCard2').classList.remove('is-flipped');
+            
+            const laugh = document.getElementById('laughSound');
+            laugh.pause();
+        }
+    </script>
+
+</body>
+</html>
