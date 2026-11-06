@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مفاجأة عيد الميلاد 🎁</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at 50% 40%, #260d33 0%, #0c0414 80%, #05010a 100%);
+            color: #ffffff;
+            overflow: hidden;
+            perspective: 1200px;
+        }
+
+        /* شاشة القفل */
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 4, 20, 0.96);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            transition: opacity 0.5s ease;
+        }
+
+        #lockScreen h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 0 20px;
+            line-height: 1.5;
+            color: #ff9ebb;
+            text-shadow: 0 0 12px rgba(255, 158, 187, 0.6);
+        }
+
+        #lockInput {
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            border: 2px solid #ff4b91;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            width: 290px;
+            letter-spacing: 1px;
+        }
+
+        #unlockBtn {
+            padding: 12px 42px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background: linear-gradient(45deg, #ff0844, #ffb199);
+            color: white;
+            box-shadow: 0 4px 18px rgba(255, 8, 68, 0.5);
+            transition: transform 0.2s;
+        }
+
+        #unlockBtn:active {
+            transform: scale(0.95);
+        }
+
+        #errorMessage {
+            color: #ff3333;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+        }
+
+        /* المحتوى الرئيسي */
+        #mainContent {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* اللوحة العلوية */
+        .header-panel {
+            position: absolute;
+            top: 20px;
+            text-align: center;
+            z-index: 100;
+            padding: 0 15px;
+            max-width: 90%;
+        }
+
+        .bday-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #f7b731;
+            margin-bottom: 4px;
+        }
+
+        .status-text {
+            font-size: 1.35rem;
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(255, 75, 145, 0.7);
+            margin-bottom: 10px;
+            min-height: 42px;
+            line-height: 1.4;
+        }
+
+        .progress-bar-wrap {
+            width: 270px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b, #f7b731);
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        /* حاوية الصندوق 3D */
+        .stage {
+            width: 260px;
+            height: 260px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-20deg) rotateY(28deg);
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
+            z-index: 10;
+            margin-top: 140px;
+            pointer-events: none;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            pointer-events: none;
+        }
+
+        /* جدران الصندوق */
+        .face {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            background: linear-gradient(135deg, #44113b, #1d0724);
+            border: 2px solid #ff4b91;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.85);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .face-bottom { transform: rotateX(-90deg) translateZ(130px); background: #130318; }
+        .face-back   { transform: rotateY(180deg) translateZ(130px); }
+        .face-left   { transform: rotateY(-90deg) translateZ(130px); }
+        .face-right  { transform: rotateY(90deg) translateZ(130px); }
+        .face-front  { transform: translateZ(130px); }
+
+        /* الغطاء */
+        .lid {
+            width: 270px;
+            height: 270px;
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            transform-style: preserve-3d;
+            transform-origin: top center;
+            transform: rotateX(90deg) translateZ(135px);
+            transition: transform 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .lid-face {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #701a5e, #310839);
+            border: 3px solid #ff75a0;
+            box-shadow: 0 0 25px rgba(255, 75, 145, 0.5);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            pointer-events: none;
+        }
+
+        .ribbon-v, .ribbon-h {
+            position: absolute;
+            background: linear-gradient(90deg, #e5a93b, #ffd700);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .ribbon-v { width: 40px; height: 100%; }
+        .ribbon-h { width: 100%; height: 40px; }
+
+        .bow-knot {
+            position: absolute;
+            font-size: 2.2rem;
+            z-index: 5;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        /* المحتويات الداخلية */
+        .box-contents {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            transform-style: preserve-3d;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .box-contents.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* تصميم البطاقات العائمة فوق الصندوق */
+        .draggable-card {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            top: 5px;
+            left: 5px;
+            border-radius: 20px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9);
+            touch-action: none;
+            cursor: pointer;
+            overflow: hidden;
+            display: none;
+            opacity: 0;
+            transform: translateZ(160px) translateY(40px) scale(0.9);
+            transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.5s ease, box-shadow 0.2s ease;
+            z-index: 50;
+        }
+
+        /* البطاقة النشطة تبرز للأعلى وتصبح قابلة للتفاعل بنسبة 100% */
+        .draggable-card.card-active {
+            display: block;
+            opacity: 1;
+            transform: translateZ(180px) translateY(-90px) scale(1.05);
+            pointer-events: auto !important;
+        }
+
+        .draggable-card:active {
+            box-shadow: 0 25px 55px rgba(255, 42, 122, 0.7);
+        }
+
+        /* البطاقة 1 */
+        #cardLayer1 {
+            background: linear-gradient(135deg, #1f2742, #101424);
+            border: 2px solid #6c7ea8;
+        }
+
+        /* البطاقة 2 */
+        #cardLayer2 {
+            background: linear-gradient(135deg, #44143a, #21061c);
+            border: 2px solid #e03268;
+        }
+
+        /* بطاقة الهدية النهائية */
+        #giftCardFinal {
+            background: linear-gradient(135deg, #4d0a2d, #1f0211);
+            border: 3px solid #ff2a7a;
+        }
+
+        /* غطاء الإخفاء والتشويق داخل البطاقة */
+        .card-mystery-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #1b162b, #0d0a17);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            z-index: 10;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .mystery-badge {
+            font-size: 3.2rem;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+            animation: pulseMystery 1.2s infinite alternate;
+        }
+
+        @keyframes pulseMystery {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1.08); }
+        }
+
+        .mystery-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffd700;
+            margin-bottom: 8px;
+        }
+
+        .mystery-desc {
+            font-size: 0.9rem;
+            color: #d1c7d8;
+            line-height: 1.4;
+        }
+
+        .mystery-swipe-call {
+            margin-top: 15px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            color: #ff9ebb;
+            font-weight: bold;
+            border: 1px dashed rgba(255, 158, 187, 0.5);
+        }
+
+        /* المحتوى الداخلي للبطاقة (مخفي تحت الغطاء) */
+        .card-secret-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 18px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        /* عند السحب أو النقر ينكشف المحتوى فوراً */
+        .card-revealed .card-mystery-cover {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+
+        .card-revealed .card-secret-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ff9ebb;
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        .swipe-hint {
+            font-size: 0.85rem;
+            color: #f7b731;
+            margin-top: 12px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        /* رسمة العضو الذكري بالـ SVG */
+        .dildo-wrap {
+            width: 100%;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 6px;
+        }
+
+        .dildo-svg {
+            height: 100px;
+            filter: drop-shadow(0 4px 12px rgba(255, 42, 122, 0.7));
+            animation: dildoFloat 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes dildoFloat {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            100% { transform: translateY(-5px) rotate(5deg); }
+        }
+
+        /* زر الأكشن الرئيسي */
+        .action-button {
+            position: absolute;
+            bottom: 35px;
+            padding: 14px 44px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #ff0844, #ffb199);
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(255, 8, 68, 0.5);
+            cursor: pointer;
+            z-index: 100;
+            transition: transform 0.2s ease;
+        }
+
+        .action-button:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شاشة القفل -->
+    <div id="lockScreen">
+        <h2>رقم معلمك بعدين رقمك 😎</h2>
+        <input type="password" id="lockInput" placeholder="أدخلي الرمز السري...">
+        <button id="unlockBtn" onclick="checkLock()">فتح الصندوق</button>
+        <div id="errorMessage">الرمز خاطئ! جربي مرة تانية 🤬</div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div id="mainContent">
+        <div class="header-panel">
+            <div class="bday-title">🎉 عيد ميلاد سعيد يا مشاغبة 🎉</div>
+            <div class="status-text" id="statusText">انقري لفك شريط التغليف الذهبي 🎀</div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="stage" id="boxStage">
+            <div class="cube">
+                <div class="face face-bottom"></div>
+                <div class="face face-back"></div>
+                <div class="face face-left"></div>
+                <div class="face face-right"></div>
+                <div class="face face-front"></div>
+
+                <div class="lid" id="boxLid">
+                    <div class="lid-face">
+                        <div class="ribbon-v" id="ribbonV"></div>
+                        <div class="ribbon-h" id="ribbonH"></div>
+                        <div class="bow-knot" id="bowKnot">🎁</div>
+                    </div>
+                </div>
+
+                <div class="box-contents" id="boxContents">
+                    
+                    <!-- البطاقة الأولى: محتواها مخفي حتى السحب -->
+                    <div class="draggable-card card-active" id="cardLayer1">
+                        <div class="card-mystery-cover">
+                            <div class="mystery-badge">🤫🔒</div>
+                            <div class="mystery-title">رسالة سرية ومقفلة</div>
+                            <div class="mystery-desc">المحتوى مخفي تماماً ولن يظهر إلا إذا سحبتِ البطاقة!</div>
+                            <div class="mystery-swipe-call">اسحبيني لكشف المكتوب ➔</div>
+                        </div>
+                        <div class="card-secret-content">
+                            <div class="card-icon">🛑</div>
+                            <div class="card-title">طولي بالك شوية!</div>
+                            <div class="card-desc">مفكرة الهدية بتوصليها بلمسة وحدة؟ ممنوع اللمس إلا لما تزيحيني! 😜</div>
+                            <div class="swipe-hint">اسحبيني بعيداً أو انقري للإزاحة ➔</div>
+                        </div>
+                    </div>
+
+                    <!-- البطاقة الثانية: تبرز بعد إزاحة الأولى ومحتواها مخفي حتى السحب -->
+                    <div class="draggable-card" id="cardLayer2">
+                        <div class="card-mystery-cover">
+                            <div class="mystery-badge">🔥💌</div>
+                            <div class="mystery-title">المعايدة الخاصة</div>
+                            <div class="mystery-desc">مكتوبة خصيصاً إلك.. اسحبي البطاقة لتشوفي شو مكتوب جوا!</div>
+                            <div class="mystery-swipe-call">اسحبيني لكشف المعايدة ➔</div>
+                        </div>
+                        <div class="card-secret-content">
+                            <div class="card-icon">🔥</div>
+                            <div class="card-title">كل عام وإنتِ أحلى مشاغبة</div>
+                            <div class="card-desc">افتحي وخدي هديتك اللي بتستحقيها بدون نكد.. قربتي تشوفيها! 😉</div>
+                            <div class="swipe-hint">اسحبيني بعيداً لتصلي للهدية ➔</div>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة الهدية النهائية: العضو الذكري الاصطناعي -->
+                    <div class="draggable-card" id="giftCardFinal">
+                        <div class="card-secret-content" style="opacity: 1; transform: scale(1);">
+                            <div class="dildo-wrap">
+                                <svg class="dildo-svg" viewBox="0 0 160 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="dGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#ff79a5"/>
+                                            <stop offset="50%" stop-color="#e84393"/>
+                                            <stop offset="100%" stop-color="#9b1359"/>
+                                    </linearGradient>
+                                </defs>
+                                <ellipse cx="80" cy="195" rx="55" ry="16" fill="#800e47" stroke="#ff79cd" stroke-width="2"/>
+                                <path d="M 52 188 C 50 145, 54 105, 52 75 C 50 56, 62 38, 80 38 C 98 38, 110 56, 108 75 C 106 105, 110 145, 108 188 Z" fill="url(#dGrad)" stroke="#ff9ebb" stroke-width="2"/>
+                                <path d="M 48 74 C 44 65, 55 30, 80 20 C 105 30, 116 65, 112 74 C 104 82, 56 82, 48 74 Z" fill="url(#dGrad)" stroke="#ff80b5" stroke-width="2"/>
+                                <path d="M 78 22 L 78 33" stroke="#ffd1dc" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                            </div>
+                            <div class="card-title" style="color: #ff4d88; font-size: 1.15rem;">قضيب ذكري اصطناعي فاخر 🍆</div>
+                            <div class="card-desc" style="font-size: 0.88rem; color: #ffd1dc;">
+                                هديتك بعيد ميلادك! تسلّي فيه منيح لبين ما نلتقي وتاخدي الحقيقي بدون أعذار 😂💋
+                            </div>
+                            <div class="swipe-hint" style="color: #ff75a0; margin-top: 8px;">كل عام وأنتِ بألف خير ❤️</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <button class="action-button" id="actionBtn" onclick="nextProgressStep()">فك الشريطة 🎀</button>
+    </div>
+
+    <script>
+        // التحقق من الرمز السري
+        function checkLock() {
+            const input = document.getElementById('lockInput').value;
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if(input === '09961838670996614197') {
+                errorMsg.style.display = 'none';
+                document.getElementById('lockScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('lockScreen').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'flex';
+                }, 500);
+            } else {
+                errorMsg.style.display = 'block';
+                errorMsg.style.animation = 'none';
+                setTimeout(() => {
+                    errorMsg.style.animation = 'shake 0.4s ease-in-out';
+                }, 10);
+            }
+        }
+
+        // نظام الفتح بنقرة واحدة لكل مرحلة
+        let stageStep = 0;
+        const statusText = document.getElementById('statusText');
+        const progressBar = document.getElementById('progressBar');
+        const actionBtn = document.getElementById('actionBtn');
+        const boxLid = document.getElementById('boxLid');
+        const boxContents = document.getElementById('boxContents');
+        const ribbonV = document.getElementById('ribbonV');
+        const ribbonH = document.getElementById('ribbonH');
+        const bowKnot = document.getElementById('bowKnot');
+        const stage = document.getElementById('boxStage');
+
+        function nextProgressStep() {
+            if (stageStep === 0) {
+                ribbonV.style.opacity = '0';
+                ribbonH.style.opacity = '0';
+                bowKnot.style.opacity = '0';
+                stageStep = 1;
+                progressBar.style.width = '30%';
+                statusText.innerText = "انفكت الشريطة! الصندوق مقفول.. انقري لكسر القفل 🔒";
+                actionBtn.innerText = "اكسري القفل 🔓";
+                return;
+            }
+
+            if (stageStep === 1) {
+                stage.style.transform = `rotateX(-20deg) rotateY(35deg) scale(1.06)`;
+                setTimeout(() => {
+                    stage.style.transform = `rotateX(-20deg) rotateY(28deg) scale(1)`;
+                }, 150);
+
+                stageStep = 2;
+                progressBar.style.width = '65%';
+                statusText.innerText = "انكسر القفل! جاهزة تشوفي شو مخبيلك؟ ارفعي الغطاء 👀";
+                actionBtn.innerText = "افتحي الغطاء شوي شوي 👀";
+                return;
+            }
+
+            if (stageStep === 2) {
+                boxLid.style.transform = 'rotateX(35deg) translateZ(135px)';
+                stageStep = 3;
+                progressBar.style.width = '85%';
+                statusText.innerText = "الصندوق بلش ينفتح.. ارمي الغطاء بالكامل وخدي هديتك! 🎁";
+                actionBtn.innerText = "إزالة الغطاء نهائياً 🎁";
+                return;
+            }
+
+            if (stageStep === 3) {
+                boxLid.style.transform = 'rotateX(-125deg) translateZ(135px)';
+                stage.style.transform = 'rotateX(-30deg) rotateY(0deg) scale(1.05)';
+                boxContents.classList.add('active');
+                progressBar.style.width = '100%';
+                statusText.innerText = "اسحبي البطاقة لكشف الرسالة السرية! ⬇️";
+                actionBtn.style.display = 'none';
+                stageStep = 4;
+            }
+        }
+
+        // دالة تفاعل البطاقات
+        function setupInteractiveCard(cardId, nextCardId, nextStatusText) {
+            const el = document.getElementById(cardId);
+            let isDown = false;
+            let startX = 0, startY = 0;
+            let moveX = 0, moveY = 0;
+            let isRevealed = false;
+
+            function revealContent() {
+                if (!isRevealed) {
+                    isRevealed = true;
+                    el.classList.add('card-revealed');
+                }
+            }
+
+            function dismiss() {
+                el.style.transition = 'all 0.5s ease-out';
+                el.style.transform = `translate(${moveX > 0 ? 450 : -450}px, -150px) rotate(${moveX > 0 ? 35 : -35}deg) scale(0.8)`;
+                el.style.opacity = '0';
+                el.style.pointerEvents = 'none';
+
+                setTimeout(() => {
+                    el.style.display = 'none';
+                    if (nextCardId) {
+                        const nextEl = document.getElementById(nextCardId);
+                        nextEl.classList.add('card-active');
+                        if (nextStatusText) statusText.innerText = nextStatusText;
+                    }
+                }, 300);
+            }
+
+            el.addEventListener('pointerdown', (e) => {
+                isDown = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                moveX = 0;
+                moveY = 0;
+                el.style.transition = 'none';
+                el.setPointerCapture(e.pointerId);
+                revealContent();
+            });
+
+            el.addEventListener('pointermove', (e) => {
+                if (!isDown) return;
+                moveX = e.clientX - startX;
+                moveY = e.clientY - startY;
+
+                if (Math.hypot(moveX, moveY) > 5) revealContent();
+
+                el.style.transform = `translateZ(180px) translateY(calc(-90px + ${moveY}px)) translateX(${moveX}px) rotate(${moveX * 0.08}deg) scale(1.05)`;
+            });
+
+            el.addEventListener('pointerup', (e) => {
+                if (!isDown) return;
+                isDown = false;
+                el.releasePointerCapture(e.pointerId);
+
+                const dist = Math.hypot(moveX, moveY);
+                if (dist > 45) {
+                    dismiss();
+                } else {
+                    el.style.transition = 'all 0.3s ease';
+                    el.style.transform = 'translateZ(180px) translateY(-90px) scale(1.05)';
+                }
+            });
+        }
+
+        setupInteractiveCard(
+            'cardLayer1', 
+            'cardLayer2', 
+            '🎉 برافو! اسحبي بطاقة المعايدة لتصلي للهدية الحقيقية 👀🔥'
+        );
+
+        setupInteractiveCard(
+            'cardLayer2', 
+            'giftCardFinal', 
+            '🎉 وكل عام وأنتِ بألف خير.. تفضلي هديتك الفاخرة! 😂🍆'
+        );
+
+        const finalGift = document.getElementById('giftCardFinal');
+        finalGift.addEventListener('click', () => {
+            statusText.innerText = "مبروك عليكِ الهدية.. استمتعي فيها يا قلبي! 💋🔥";
+        });
+    </script>
+</body>
+</html>
